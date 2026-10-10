@@ -8,6 +8,8 @@ import '../models/review.dart';
 import '../services/place_service.dart';
 import '../widgets/rating_widgets.dart';
 
+import '../widgets/place_location_card.dart';
+
 class PlaceDetailScreen extends StatelessWidget {
   final String gid;
   final String pid;
@@ -107,6 +109,8 @@ class PlaceDetailScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                  const SizedBox(height: 12),
+                  PlaceLocationCard(gid: gid, place: place, canEdit: place.createdBy == uid),
                   const SizedBox(height: 16),
                   Text('Reseñas (${reviews.length})', style: theme.textTheme.titleMedium),
                   const SizedBox(height: 8),

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../models/place.dart';
 import '../models/rating_categories.dart';
@@ -44,15 +45,28 @@ class PlaceService {
     required String name,
     required PlaceType type,
     String city = '',
+    LatLng? location,
+    String? address,
   }) async {
     final ref = await _places(gid).add({
       'name': name.trim(),
       'type': type.value,
       'city': city.trim(),
+      if (location != null) 'lat': location.latitude,
+      if (location != null) 'lng': location.longitude,
+      if (location != null && address != null && address.isNotEmpty) 'address': address,
       'createdBy': _uid,
       'createdAt': FieldValue.serverTimestamp(),
     });
     return ref.id;
+  }
+
+  Future<void> updateLocation(String gid, String pid, LatLng location, String? address) {
+    return _places(gid).doc(pid).update({
+      'lat': location.latitude,
+      'lng': location.longitude,
+      'address': (address != null && address.isNotEmpty) ? address : FieldValue.delete(),
+    });
   }
 
   // ---------- Reseñas ----------

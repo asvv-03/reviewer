@@ -59,6 +59,11 @@ class GroupDetailScreen extends StatelessWidget {
               appBar: AppBar(
                 title: Text(groupName),
                 actions: [
+                  IconButton(
+                    tooltip: 'Mapa',
+                    icon: const Icon(Icons.map_outlined),
+                    onPressed: () => context.push('/group/$gid/map'),
+                  ),
                   if (isAdmin)
                     IconButton(
                       tooltip: 'Invitar',

@@ -83,7 +83,7 @@ class GroupsScreen extends StatelessWidget {
           }
           return ListView.separated(
             itemCount: groups.length,
-            separatorBuilder: (_, __) => const Divider(height: 1),
+            separatorBuilder: (_, _) => const Divider(height: 1),
             itemBuilder: (_, i) {
               final g = groups[i];
               return ListTile(

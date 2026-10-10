@@ -102,7 +102,7 @@ class GroupService {
       'createdAt': FieldValue.serverTimestamp(),
       'expiresAt': Timestamp.fromDate(DateTime.now().add(const Duration(days: 7))),
     });
-    return '${kPublicUrl}#/join/${ref.id}';
+    return '$kPublicUrl#/join/${ref.id}';
   }
 
   Future<Invite?> getInvite(String inviteId) async {

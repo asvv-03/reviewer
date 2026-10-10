@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../models/rating_categories.dart';
+import '../services/location_service.dart';
 import '../services/place_service.dart';
+import 'location_picker.dart';
 
 /// Pide nombre, tipo y ciudad; crea el lugar y abre su pantalla.
 Future<void> showAddPlaceDialog(BuildContext context, String gid) async {
   final nameCtrl = TextEditingController();
   final cityCtrl = TextEditingController();
   PlaceType type = PlaceType.restaurant;
+  LatLng? location;
+  String? address;
   String? error;
   bool busy = false;
 
@@ -43,6 +48,37 @@ Future<void> showAddPlaceDialog(BuildContext context, String gid) async {
                 textCapitalization: TextCapitalization.words,
                 decoration: const InputDecoration(labelText: 'Ciudad o zona (opcional)'),
               ),
+              const SizedBox(height: 12),
+              OutlinedButton.icon(
+                icon: Icon(location == null ? Icons.add_location_alt_outlined : Icons.check_circle),
+                label: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 200),
+                  child: Text(
+                    location == null
+                        ? 'Ubicación en el mapa (opcional)'
+                        : (address ?? 'Ubicación guardada'),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                onPressed: () async {
+                  final picked = await Navigator.of(ctx).push<PickedLocation>(
+                    MaterialPageRoute(
+                      builder: (_) => LocationPickerScreen(
+                        initial: location,
+                        initialQuery: [nameCtrl.text, cityCtrl.text]
+                            .where((s) => s.trim().isNotEmpty)
+                            .join(', '),
+                      ),
+                    ),
+                  );
+                  if (picked != null) {
+                    setState(() {
+                      location = picked.point;
+                      address = picked.address;
+                    });
+                  }
+                },
+              ),
               if (error != null) ...[
                 const SizedBox(height: 8),
                 Text(error!, style: TextStyle(color: Theme.of(ctx).colorScheme.error)),
@@ -70,6 +106,8 @@ Future<void> showAddPlaceDialog(BuildContext context, String gid) async {
                         name: nameCtrl.text,
                         type: type,
                         city: cityCtrl.text,
+                        location: location,
+                        address: address,
                       );
                       if (ctx.mounted) Navigator.pop(ctx, id);
                     } catch (e) {

@@ -11,6 +11,8 @@ import 'screens/login.dart';
 import 'screens/place_detail.dart';
 import 'screens/review_form.dart';
 
+import 'screens/group_map.dart';
+
 /// Hace que el router vuelva a evaluar el redirect cuando cambia la sesión.
 class _AuthRefresh extends ChangeNotifier {
   _AuthRefresh(Stream<User?> stream) {
@@ -43,8 +45,8 @@ final router = GoRouter(
     return null;
   },
   routes: [
-    GoRoute(path: '/', builder: (_, __) => const GroupsScreen()),
-    GoRoute(path: '/login', builder: (_, __) => const LoginScreen()),
+    GoRoute(path: '/', builder: (_, _) => const GroupsScreen()),
+    GoRoute(path: '/login', builder: (_, _) => const LoginScreen()),
     GoRoute(
       path: '/group/:gid',
       builder: (_, s) => GroupDetailScreen(gid: s.pathParameters['gid']!),
@@ -67,6 +69,10 @@ final router = GoRouter(
     GoRoute(
       path: '/join/:inviteId',
       builder: (_, s) => JoinScreen(inviteId: s.pathParameters['inviteId']!),
+    ),
+    GoRoute(
+      path: '/group/:gid/map',
+      builder: (_, s) => GroupMapScreen(gid: s.pathParameters['gid']!),
     ),
   ],
 );
