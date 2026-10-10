@@ -6,7 +6,7 @@ import 'auth_service.dart';
 
 /// URL pública donde se despliega la app (GitHub Pages). Cámbiala por la tuya,
 /// con la barra final. Con la estrategia de URL por defecto se usa "#/ruta".
-const kPublicUrl = 'https://TU-USUARIO.github.io/TU-REPO/';
+const kPublicUrl = 'https://asvv-03.github.io/reviewer/';
 
 class GroupService {
   GroupService._();
